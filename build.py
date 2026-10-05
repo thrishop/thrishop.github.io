@@ -244,12 +244,8 @@ def head(title, desc, canonical, og_type="website", extra=""):
 
 
 def header_html():
-    gh_link = f'<a href="{e(GH_URL)}" rel="noopener">GitHub</a>' if GH_URL else ""
-    return f"""<header class="site"><div class="wrap">
-<a class="brand" href="{BASE_PATH}/"><img src="{BASE_PATH}/assets/favicon.svg" alt="" width="28" height="28">{e(SITE)} {e(CAT)}</a>
-<nav class="top" aria-label="Main"><a href="{BASE_PATH}/">All tools</a><a href="{BASE_PATH}/disclaimer/">Disclaimer</a>{gh_link}<a class="cta" href="{e(MAIN)}/">Visit {e(SITE)}</a></nav>
-</div></header>
-"""
+    """The top bar (logo, site name, All tools, ...) is removed on every page."""
+    return ""
 
 
 def footer_html():
@@ -257,7 +253,7 @@ def footer_html():
     return f"""<footer class="site"><div class="wrap"><div class="cols">
 <div><p><strong>{e(SITE)} {e(CAT)}</strong> is an independent directory of download links, file sizes and install guides.</p>
 <p>All product names, logos and brands are property of their respective owners. We are not affiliated with, endorsed by or sponsored by any project listed. Always download software from the official source and check licences before use.</p></div>
-<div><p><a href="{BASE_PATH}/">All tools</a><br><a href="{BASE_PATH}/disclaimer/">Disclaimer</a><br><a href="{e(MAIN)}/">{e(MAIN.replace('https://', ''))}</a>{footer_gh}</p><p>Updated {TODAY}</p></div>
+<div><p><a href="{BASE_PATH}/disclaimer/">Disclaimer</a><br><a href="{e(MAIN)}/">{e(MAIN.replace('https://', ''))}</a>{footer_gh}</p><p>Updated {TODAY}</p></div>
 </div></div></footer>
 </body>
 </html>
@@ -387,27 +383,47 @@ b.addEventListener('click',function(){{var u=atob(b.getAttribute('data-u'));var 
 def build_index(rows, meta):
     title = f"{CAT} \u2013 Download Links, File Sizes & Install Guides | {SITE}"
     desc = f"Browse {len(rows)} {CAT.lower()} with direct download links, file sizes and step-by-step install guides for local LLMs, image and speech models, agents and developer tools."
-    items = "".join(
-        f'<a class="tile" data-s="{e((o["headline_text"] + " " + o["description"]).lower())}" href="{BASE_PATH}/{o["entry_id"]}/"><b>{e(o["headline_text"])}</b><small>{e(trunc(o["description"], 110))}</small><div class="sz">{e(fmt_size(o["file_size"]))}</div></a>'
-        for o in rows)
     h = head(title, desc, BASE_URL + "/", "website", jsonld(
         {"@context": "https://schema.org", "@type": "CollectionPage", "name": title, "description": desc, "url": BASE_URL + "/",
          "mainEntity": {"@type": "ItemList", "numberOfItems": len(rows), "itemListElement": [
              {"@type": "ListItem", "position": n + 1, "url": f"{BASE_URL}/{o['entry_id']}/", "name": o["headline_text"]} for n, o in enumerate(rows[:100])]}}))
     h += header_html()
+    picks = [
+        ("ollama/ollama", "Ollama", "run large language models locally with one command"),
+        ("ggml-org/llama.cpp", "llama.cpp", "fast C/C++ inference for GGUF models on CPU and GPU"),
+        ("open-webui/open-webui", "Open WebUI", "self-hosted chat interface for local and remote models"),
+        ("AUTOMATIC1111/stable-diffusion-webui", "Stable Diffusion WebUI", "the most widely used web interface for Stable Diffusion"),
+        ("openai/whisper", "Whisper", "open-source speech-to-text that can run fully offline"),
+        ("huggingface/transformers", "Transformers", "pretrained models for text, vision and audio in Python"),
+        ("langgenius/dify", "Dify", "build and self-host LLM-powered apps and workflows"),
+        ("vllm-project/vllm", "vLLM", "high-throughput inference and serving engine for LLMs"),
+    ]
+    picks_html = "".join(
+        f'<li><a href="https://github.com/{e(repo)}" rel="noopener"><code>{e(repo)}</code></a> &ndash; <strong>{e(nm)}</strong>, {e(txt)}.</li>'
+        for repo, nm, txt in picks)
+    btns = f'<a class="btn dark" href="{e(MAIN)}/" rel="noopener">Visit {e(SITE)}</a>'
+    if GH_URL:
+        btns += f' <a class="btn dark" href="{e(GH_URL)}" rel="noopener">github.com/{e(GH_USER)}</a>'
     h += f"""<div class="wrap">
-<section class="home-hero">
-<h1>{e(CAT)}</h1>
-<p>{len(rows)} tools with download links, file sizes and install guides. Local LLM apps, image and video generators, speech models, agents, RAG tools and more.</p>
-<input id="q" class="search" type="search" placeholder="Search tools, e.g. Ollama, Whisper, ComfyUI&hellip;" aria-label="Search tools" autocomplete="off">
-<div class="count" id="count">{len(rows)} tools</div>
-</section>
-<div class="related" id="grid" style="padding-bottom:40px">{items}</div>
+<article class="gh-post">
+<div class="gh-post-head"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M0 1.75A.75.75 0 0 1 .75 1h4.253c1.227 0 2.317.59 3 1.501A3.743 3.743 0 0 1 11.006 1h4.245a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75h-4.507a2.25 2.25 0 0 0-1.591.659l-.622.621a.75.75 0 0 1-1.06 0l-.622-.621A2.25 2.25 0 0 0 5.258 13H.75a.75.75 0 0 1-.75-.75Zm7.251 10.324.004-5.073-.002-2.253A2.25 2.25 0 0 0 5.003 2.5H1.5v9h3.757a3.75 3.75 0 0 1 1.994.574ZM8.755 4.75l-.004 7.322a3.752 3.752 0 0 1 1.992-.572H14.5v-9h-3.495a2.25 2.25 0 0 0-2.25 2.25Z"/></svg><span>README.md</span></div>
+<div class="gh-post-body">
+<h1>About {e(CAT)}</h1>
+<p>{e(CAT)} are the programs, libraries and models that let you run artificial intelligence on your own computer or server: chat assistants, image and video generators, speech recognition and text-to-speech, vector databases, agents and training tools. Most of them are open source and live on GitHub, where you can read the code, check the releases and follow the issues.</p>
+<p>This directory collects <strong>{len(rows)} entries</strong> with a download button, the file size and a short install guide for each one. Every page tells you what the tool does, what you need to run it, and which operating system it supports.</p>
+<h2>Popular projects on GitHub</h2>
+<ul>{picks_html}</ul>
+<h2>What every tool page includes</h2>
+<ul>
+<li>A short description of what the tool does and who it is for.</li>
+<li>The file size, supported operating system and system requirements.</li>
+<li>A step-by-step install guide and answers to common questions.</li>
+<li>One download button that opens the tool's entry on {e(SITE)}.</li>
+</ul>
+<p>{btns}</p>
 </div>
-<script>
-(function(){{var q=document.getElementById('q'),g=document.getElementById('grid'),c=document.getElementById('count'),t=[].slice.call(g.children);
-q.addEventListener('input',function(){{var v=q.value.trim().toLowerCase(),n=0;t.forEach(function(x){{var m=!v||x.getAttribute('data-s').indexOf(v)>-1;x.style.display=m?'':'none';if(m)n++}});c.textContent=n+(n===1?' tool':' tools')}})}})();
-</script>
+</article>
+</div>
 """
     return h + footer_html()
 

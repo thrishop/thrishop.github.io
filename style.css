@@ -65,7 +65,7 @@ footer.site a{color:var(--muted);text-decoration:underline}
 .count{color:var(--muted);font-size:14px;margin:14px 0 18px}
 .doc{max-width:760px;padding:30px 0 50px}
 .doc h1{font-size:32px}
-@media (max-width:860px){.layout{grid-template-columns:1fr}
+@media (max-width:860px){nav.top a:not(.cta){display:none}}
 /* ---- GitHub look ---- */
 :root{--radius:6px}
 header.site{background:#010409;border-bottom:1px solid #3d444d}
@@ -90,3 +90,19 @@ header.site nav.top a.cta:hover{background:#151b23}
 main article h2{font-weight:600;font-size:20px}
 .tile,details,pre,table.spec,.search{border-radius:var(--radius)}
 .tile:hover{border-color:var(--accent);background:var(--bg2)}
+
+/* ---- home page: GitHub-style post, black buttons ---- */
+.btn.dark{background:#1f2328;color:#fff;border:1px solid #1f2328;box-shadow:0 1px 0 rgba(31,35,40,.1)}
+.btn.dark:hover{background:#32383f;border-color:#32383f;text-decoration:none}
+@media (prefers-color-scheme:dark){.btn.dark{background:#000;border-color:#3d444d}.btn.dark:hover{background:#151b23}}
+.gh-post{border:1px solid var(--line);border-radius:var(--radius);margin:28px 0 8px;background:var(--bg)}
+.gh-post-head{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--line);border-radius:6px 6px 0 0;font-size:14px;font-weight:600}
+.gh-post-body{padding:8px 32px 26px}
+.gh-post-body h1{font-size:30px;font-weight:600;margin:18px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.gh-post-body h2{font-size:22px;font-weight:600;margin:26px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.gh-post-body ul,.gh-post-body ol{padding-left:26px;margin:0 0 14px}
+.gh-post-body li{margin:6px 0}
+.gh-post-body li code{background:var(--code);padding:2px 6px;border-radius:5px}
+.home-hero{padding:26px 0 14px;text-align:left}
+.home-hero h2{font-size:22px;font-weight:600;margin:0 0 12px}
+@media (max-width:600px){.gh-post-body{padding:4px 18px 20px}}

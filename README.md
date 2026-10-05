@@ -10,12 +10,11 @@ Static directory (5000 pages: download button, file size, install guide) generat
 - `entries.csv` - all 5000 entries
 - `config.json` - site name, GitHub user, website, post_url, base_url, publish_limit
 - `build.py`, `style.css`, `favicon.svg`, `og.png`
-- `deploy.yml` - GitHub Actions workflow. Move it to `.github/workflows/deploy.yml` in the repo (GitHub web: Add file > Create new file, type `.github/workflows/deploy.yml` as the name and paste the content).
+- `pages.yml` - GitHub Actions workflow. Put it at `.github/workflows/pages.yml` in the repo (GitHub web: Add file > Create new file, type `.github/workflows/pages.yml` as the name and paste the content). It works out the site URL from the repo name automatically.
 
 ## Publish
-1. Create a repo (for `https://thrishop.github.io` name it `thrishop.github.io`) and upload these files.
+1. Create a repo under the `thrishop` account and upload these files.
 2. Add the workflow as described above.
 3. Settings > Pages > Source: GitHub Actions.
-4. If your Pages address differs, change `base_url` in `config.json` (for a project repo: `https://thrishop.github.io/<repo>`).
 
 Local test: `BASE_URL=http://localhost:8000 python build.py`, then serve the `dist` folder.

@@ -3,7 +3,7 @@
   "github_user": "thrishop",
   "main_site": "https://thrishop.online",
   "post_url": "https://thrishop.online/?id={entry_id}",
-  "base_url": "https://thrishop.github.io",
+  "base_url": "",
   "publish_limit": 5000,
   "category_label": "AI & ML Tools"
 }
